@@ -110,13 +110,9 @@ section#TTT_game{
 
 	#game_stat {
 		background: #eee;
-		margin: 10px;
-		width: 300px;
-		height: 90px;
-		vertical-align: middle;
 		text-align: center;
-		padding-top: 10px;
 		font-family: $hdrFont;
+		padding: 10px 0;
 
 		#game_stat_msg {
 			@include font-size(28px);

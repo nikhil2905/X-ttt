@@ -16,33 +16,36 @@ export default class Header extends Component {
 			<header id='main_header'>
 				<div id='brand'>
 					<div className='container'>
-
-						<Link to={app.settings.ws_conf.header.head_l_logo.u} className='logo-tl'>
-							<img src={app.settings.ws_conf.header.head_l_logo.i} />
-						</Link>
-
-
-						<Link to={app.settings.ws_conf.header.site_title.u} className='main-site-name'>
-							{app.settings.ws_conf.header.site_title.txt}
-						</Link>
-
-						<nav>
-							<ul>
-								{
-									app.settings.ws_conf.main_menu.pages.p.map(function (p, i) {
-										return (
-											<li key={i}>
-												<Link 	to={p.u} >
-													<i className={'fa fa-2x '+p.ico} aria-hidden="true"></i>
-													{p.name}
-												</Link>
-											</li>
-										)
-									})
-								}
-							</ul>
-						</nav>
-
+						<div className="row">
+							<div className="col-4">
+								<Link to={app.settings.ws_conf.header.head_l_logo.u} className='logo-tl'>
+									<img src={app.settings.ws_conf.header.head_l_logo.i} />
+								</Link>
+							</div>
+							<div className="col-4 main-site-name">
+								<Link to={app.settings.ws_conf.header.site_title.u}>
+									{app.settings.ws_conf.header.site_title.txt}
+								</Link>
+							</div>
+							<div className="col-4">
+								<nav>
+									<ul className='row'>
+										{
+											app.settings.ws_conf.main_menu.pages.p.map(function (p, i) {
+												return (
+													<li className='col-4-sm' key={i}>
+														<Link 	to={p.u} >
+															<i className={'fa fa-2x '+p.ico} aria-hidden="true"></i>
+															{p.name}
+														</Link>
+													</li>
+												)
+											})
+										}
+									</ul>
+								</nav>
+							</div>
+						</div>
 					</div>
 				</div>
 

@@ -3,7 +3,6 @@
 	margin:0 auto;
 	position:relative;
 	margin-top:0;
-	padding:0 30px;
 }
 
 .left {
@@ -29,4 +28,7 @@ html, body {
 	//overflow:scroll;
 	min-height:100%;
 	// overflow:hidden;
+	&.small{
+		padding-top: 180px;
+	}
 }

@@ -33,6 +33,7 @@ https://x-ttt.herokuapp.com/ws_conf.xml
 - Don't commit formative changes
 - Don't change folder/file structure
 - Slot into the system
+- Timelimit = 90 minutes
 
 ---
 

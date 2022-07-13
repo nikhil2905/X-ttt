@@ -23,23 +23,25 @@ import prep_env from './models/prep_env'
 
 let renderSite = function () {
 	return render((
-		<Router history={browserHistory}>
-			<Route path='/' component={Main}>
+		<div className='container'>
+			<Router history={browserHistory}>
+				<Route path='/' component={Main}>
 
-				<IndexRoute components={{mainContent: Txt_page}} />
+					<IndexRoute components={{mainContent: Txt_page}} />
 
-				<Route path='/pg/(:page)' components={{mainContent: Txt_page}} />
+					<Route path='/pg/(:page)' components={{mainContent: Txt_page}} />
 
-				<Route path='/ttt' components={{mainContent: Ttt}} />
+					<Route path='/ttt' components={{mainContent: Ttt}} />
 
-				<Route path='/pupg/(:pu_page)' components={{popup: PopUp_page}} />
+					<Route path='/pupg/(:pu_page)' components={{popup: PopUp_page}} />
 
-				<Route path='/contact-us' components={{popup: Contact}} />
+					<Route path='/contact-us' components={{popup: Contact}} />
 
-				<Route path='/error/404' components={{mainContent: ErrorPage}} />
-				<Route path="*" components={{mainContent: ErrorPage}} />
-			</Route>
-		</Router>
+					<Route path='/error/404' components={{mainContent: ErrorPage}} />
+					<Route path="*" components={{mainContent: ErrorPage}} />
+				</Route>
+			</Router>
+		</div>
 	), document.getElementById('root'))
 }
 
