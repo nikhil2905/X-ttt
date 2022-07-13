@@ -31,7 +31,9 @@ export default class SetName extends Component {
 				cell_vals: {},
 				next_turn_ply: true,
 				game_play: true,
-				game_stat: 'Start game'
+				game_stat: 'Start game',
+				you_win: 0,
+				opponent_win: 0
 			}
 		else {
 			this.sock_start()
@@ -40,7 +42,9 @@ export default class SetName extends Component {
 				cell_vals: {},
 				next_turn_ply: true,
 				game_play: false,
-				game_stat: 'Connecting'
+				game_stat: 'Connecting',
+				you_win: 0,
+				opponent_win: 0
 			}
 		}
 	}
@@ -114,38 +118,44 @@ export default class SetName extends Component {
 
 				<h3>You're playing against {this.props.game_type} {this.props.game_type === 'comp' && `in ${this.props.game_difficulty}`}</h3>
 
-				<div className="row">
-					<div className="col-6-sm">
-						<div id="game_stat">
-							<div id="game_stat_msg">{this.state.game_stat}</div>
-							<div id="game_turn_msg">{this.state.game_play ? this.state.game_play === 'Connecting' ? '. . .' : this.state.next_turn_ply ? 'Your turn' : 'Opponent turn' : 'Try again!'}</div>
-						</div>
-					</div>
-					<div className="col-6-sm">
-						<button style={{marginTop: 0}} type='submit' onClick={this.end_game.bind(this)} className='button'><span>End Game <span className='fa fa-caret-right'></span></span></button>
-					</div>
+				<div id="game_stat" style={{marginTop: '20px'}}>
+					<div id="game_stat_msg">{this.state.game_stat}</div>
+					<div id="game_turn_msg">{this.state.game_play ? this.state.game_play === 'Connecting' ? '. . .' : this.state.next_turn_ply ? 'Your turn' : 'Opponent turn' : 'Play again'}</div>
+				</div>
+				
+				<div className="row" style={{margin: '20px 0 20px 0'}}>
+					<div className="col-4-sm">Score</div>
+					<div className="col-4-sm">You ({this.state.you_win})</div>
+					<div className="col-4-sm">Opponent ({this.state.opponent_win})</div>
 				</div>
 
-				<div id="game_board">
-					<table>
-						<tbody>
-							<tr>
-								<td id='game_board-c1' ref='c1' onClick={this.click_cell.bind(this)}> {this.cell_cont('c1')} </td>
-								<td id='game_board-c2' ref='c2' onClick={this.click_cell.bind(this)} className="vbrd"> {this.cell_cont('c2')} </td>
-								<td id='game_board-c3' ref='c3' onClick={this.click_cell.bind(this)}> {this.cell_cont('c3')} </td>
-							</tr>
-							<tr>
-								<td id='game_board-c4' ref='c4' onClick={this.click_cell.bind(this)} className="hbrd"> {this.cell_cont('c4')} </td>
-								<td id='game_board-c5' ref='c5' onClick={this.click_cell.bind(this)} className="vbrd hbrd"> {this.cell_cont('c5')} </td>
-								<td id='game_board-c6' ref='c6' onClick={this.click_cell.bind(this)} className="hbrd"> {this.cell_cont('c6')} </td>
-							</tr>
-							<tr>
-								<td id='game_board-c7' ref='c7' onClick={this.click_cell.bind(this)}> {this.cell_cont('c7')} </td>
-								<td id='game_board-c8' ref='c8' onClick={this.click_cell.bind(this)} className="vbrd"> {this.cell_cont('c8')} </td>
-								<td id='game_board-c9' ref='c9' onClick={this.click_cell.bind(this)}> {this.cell_cont('c9')} </td>
-							</tr>
-						</tbody>
-					</table>
+				<div className="row">
+					<div className="col-8">
+						<div id="game_board">
+							<table>
+							<tbody>
+								<tr>
+									<td id='game_board-c1' ref='c1' onClick={this.click_cell.bind(this)}> {this.cell_cont('c1')} </td>
+									<td id='game_board-c2' ref='c2' onClick={this.click_cell.bind(this)} className="vbrd"> {this.cell_cont('c2')} </td>
+									<td id='game_board-c3' ref='c3' onClick={this.click_cell.bind(this)}> {this.cell_cont('c3')} </td>
+								</tr>
+								<tr>
+									<td id='game_board-c4' ref='c4' onClick={this.click_cell.bind(this)} className="hbrd"> {this.cell_cont('c4')} </td>
+									<td id='game_board-c5' ref='c5' onClick={this.click_cell.bind(this)} className="vbrd hbrd"> {this.cell_cont('c5')} </td>
+									<td id='game_board-c6' ref='c6' onClick={this.click_cell.bind(this)} className="hbrd"> {this.cell_cont('c6')} </td>
+								</tr>
+								<tr>
+									<td id='game_board-c7' ref='c7' onClick={this.click_cell.bind(this)}> {this.cell_cont('c7')} </td>
+									<td id='game_board-c8' ref='c8' onClick={this.click_cell.bind(this)} className="vbrd"> {this.cell_cont('c8')} </td>
+									<td id='game_board-c9' ref='c9' onClick={this.click_cell.bind(this)}> {this.cell_cont('c9')} </td>
+								</tr>
+							</tbody>
+							</table>
+						</div>
+					</div>
+					<div className="col-4">
+						<button style={{marginTop: 0, marginBottom: 30}} type='submit' onClick={this.end_game.bind(this)} className='button'><span>End Game <span className='fa fa-caret-right'></span></span></button>
+					</div>
 				</div>
 
 			</div>
@@ -310,12 +320,20 @@ export default class SetName extends Component {
 			TweenMax.killAll(true)
 			TweenMax.from('td.win', 1, {opacity: 0, ease: Linear.easeIn})
 
-			this.setState({
-				game_stat: (cell_vals[set[0]]=='x'?'You':'Opponent')+' win',
-				game_play: false
-			})
-
-			this.socket && this.socket.disconnect();
+			if(cell_vals[set[0]]==='x'){
+				this.setState({
+					you_win: this.state.you_win+1,
+					game_stat: 'You win 💪',
+					game_play: false
+				})
+			}
+			else{
+				this.setState({
+					opponent_win: this.state.opponent_win+1,
+					game_stat: 'Opponent wins 😫',
+					game_play: false
+				})
+			}
 
 		} else if (fin) {
 		
