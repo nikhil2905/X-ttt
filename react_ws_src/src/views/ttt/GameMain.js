@@ -31,6 +31,7 @@ export default class SetName extends Component {
 				cell_vals: {},
 				next_turn_ply: true,
 				game_play: true,
+				i_play_first: true,
 				game_stat: 'Start game',
 				you_win: 0,
 				opponent_win: 0
@@ -155,6 +156,7 @@ export default class SetName extends Component {
 					</div>
 					<div className="col-4">
 						<button style={{marginTop: 0, marginBottom: 30}} type='submit' onClick={this.end_game.bind(this)} className='button'><span>End Game <span className='fa fa-caret-right'></span></span></button>
+						<button style={{marginTop: 0}} onClick={this.restart_game.bind(this)} className='button'><span>Restart Game <span className='fa fa-caret-right'></span></span></button>
 					</div>
 				</div>
 
@@ -360,6 +362,23 @@ export default class SetName extends Component {
 		this.socket && this.socket.disconnect();
 
 		this.props.onEndGame()
+	}
+
+	restart() {
+		this.setState({
+			cell_vals: {},
+			next_turn_ply: this.state.i_play_first,
+			game_play: true
+		});
+
+		document.querySelectorAll('td.win').forEach((l) => l.classList.remove('win'));
+	}
+
+	restart_game() {
+		this.restart();
+
+		this.props.game_type === 'live' && this.socket.emit('restart', { cell_id: null });
+
 	}
 
 	hasWinner() {
