@@ -76,6 +76,7 @@ export default class SetName extends Component {
 
 			this.setState({
 				next_turn_ply: data.mode=='m',
+				i_play_first: data.mode=='m',
 				game_play: true,
 				game_stat: 'Playing with ' + data.opp.name
 			})
@@ -84,6 +85,8 @@ export default class SetName extends Component {
 
 
 		this.socket.on('opp_turn', this.turn_opp_live.bind(this));
+
+		this.socket.on('restartGame', this.restart.bind(this));
 
 
 

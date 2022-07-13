@@ -97,7 +97,11 @@ function onClientDisconnect() {
 
 // ----	--------------------------------------------	--------------------------------------------	
 // ----	--------------------------------------------	--------------------------------------------	
+function onRestart(data) {
+	io.to(this.player.opp.sockid).emit("restartGame", data);
 
+	util.log("Restarted by: "+this.player.name);
+}
 set_game_sock_handlers = function (socket) {
 
 	// util.log("New game player has connected: "+socket.id);
@@ -105,6 +109,8 @@ set_game_sock_handlers = function (socket) {
 	socket.on("new player", onNewPlayer);
 
 	socket.on("ply_turn", onTurn);
+
+	socket.on('restart', onRestart);
 
 	socket.on("disconnect", onClientDisconnect);
 
