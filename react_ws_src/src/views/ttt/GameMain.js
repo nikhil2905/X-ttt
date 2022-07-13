@@ -41,7 +41,7 @@ export default class SetName extends Component {
 			this.state = {
 				cell_vals: {},
 				next_turn_ply: true,
-				game_play: false,
+				game_play: 'Connecting',
 				game_stat: 'Connecting',
 				you_win: 0,
 				opponent_win: 0
