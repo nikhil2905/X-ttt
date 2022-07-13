@@ -75,6 +75,8 @@ app.extend({
 	},
 
 	start_ga () {
+		// TODO Remove - GA
+		return;
 		ga.initialize(app.settings.ws_conf.conf.ga_acc.an, { debug: true });
 		// ga.pageview(location.pathname)
 		const loclisten = browserHistory.listen((location) => {

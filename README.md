@@ -28,4 +28,22 @@ https://x-ttt.herokuapp.com/ws_conf.xml
 
 ---
 
+### The Brief
+- Make new algorithms
+- Don't commit formative changes
+- Don't change folder/file structure
+- Slot into the system
+
+---
+
+### Improvements
+- Add new difficulty mode - Godmode (minimax)
+- Score board
+- Restart game
+- Improve UI - ultra minimal grid in header & footer, make End Game button visible, etc.
+
+---
+
 ##For demonstration purposes only.
+
+---

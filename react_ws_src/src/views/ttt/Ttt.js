@@ -5,6 +5,7 @@ import SetName from './SetName'
 import SetGameType from './SetGameType'
 
 import GameMain from './GameMain'
+import SetDifficulty from './SetDifficulty'
 
 export default class Ttt extends Component {
 
@@ -40,8 +41,12 @@ export default class Ttt extends Component {
 					{game_step == 'set_game_type' && <SetGameType 
 														onSetType={this.saveGameType.bind(this)} 
 													/>}
+					{game_step == 'set_game_difficulty' && <SetDifficulty 
+						onSetDifficulty={this.saveGameDifficulty.bind(this)} 
+					/>}
 					{game_step == 'start_game' && <GameMain 
 														game_type={this.state.game_type}
+														game_difficulty={this.state.game_difficulty}
 														onEndGame={this.gameEnd.bind(this)} 
 													/>}
 
@@ -63,6 +68,12 @@ export default class Ttt extends Component {
 
 	saveGameType (t) {
 		this.state.game_type = t
+
+		this.upd_game_step()
+	}
+
+	saveGameDifficulty (t) {
+		this.state.game_difficulty = t
 
 		this.upd_game_step()
 	}
@@ -93,6 +104,8 @@ export default class Ttt extends Component {
 			return 'set_name'
 		else if (!this.state.game_type)
 			return 'set_game_type'
+		else if (this.state.game_type === 'comp' && !this.state.game_difficulty)
+			return 'set_game_difficulty'
 		else
 			return 'start_game'
 	}

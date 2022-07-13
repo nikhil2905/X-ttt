@@ -201,7 +201,8 @@ export default class SetName extends Component {
 			!cell_vals['c'+i] && empty_cells_arr.push('c'+i)
 		// console.log(cell_vals, empty_cells_arr, rand_arr_elem(empty_cells_arr))
 
-		const c = rand_arr_elem(empty_cells_arr)
+		// Pick computer move based on difficulty level
+		const c = this.props.game_difficulty === 'easy' ? rand_arr_elem(empty_cells_arr) : `c${this.bestSquare()}`;
 		cell_vals[c] = 'o'
 
 		TweenMax.from(this.refs[c], 0.7, {opacity: 0, scaleX:0, scaleY:0, ease: Power4.easeOut})
@@ -336,6 +337,83 @@ export default class SetName extends Component {
 		this.socket && this.socket.disconnect();
 
 		this.props.onEndGame()
+	}
+
+	hasWinner() {
+
+		let { cell_vals } = this.state;
+
+		const lines = [
+			[1, 2, 3],
+			[4, 5, 6],
+			[7, 8, 9],
+			[1, 4, 7],
+			[2, 5, 8],
+			[3, 6, 9],
+			[1, 5, 9],
+			[3, 5, 7]
+		];
+		for (let i = 0; i < lines.length; i++) {
+			const [a, b, c] = lines[i];
+			if (cell_vals[`c${a}`] && cell_vals[`c${a}`] === cell_vals[`c${b}`] && cell_vals[`c${a}`] === cell_vals[`c${c}`]) {
+				return cell_vals[`c${a}`];
+			}
+		}
+		return null;
+	}
+
+	hasEmptyCells (cell_vals) {
+		for (let i = 1; i <= 9; i++) {
+		  	if (!cell_vals[`c${i}`]) {
+				return true;
+		  	}
+		}
+		return false;
+	}
+
+	bestSquare() {
+		const player = 'x';
+		const opponent = 'o';
+		let { cell_vals } = this.state;
+	
+		const minimax = (squares, isMax) => {
+			// Checking for winner before optimising
+			const winner = this.hasWinner(squares);
+			if (winner === player) return { square: -1, score: 1 };
+			if (winner === opponent) return { square: -1, score: -1 };
+			// Tie
+			if (!this.hasEmptyCells(squares)) return { square: -1, score: 0 };
+			// 
+			// 
+			// 
+			// Begin Min-Max
+			const best = { square: -1, score: isMax ? -1000 : 1000 };
+			for (let i = 1; i <= 9; i++) {
+				if (squares[`c${i}`]) {
+					continue;
+				}
+				squares[`c${i}`] = isMax ? player : opponent;
+				// Simulate all outcomes
+				const score = minimax(squares, !isMax).score;
+				squares[`c${i}`] = null;
+	
+				if (isMax) {
+					if (score > best.score) {
+						best.score = score;
+						best.square = i;
+					}
+				} else {
+					if (score < best.score) {
+						best.score = score;
+						best.square = i;
+					}
+				}
+			}
+	
+			return best;
+		};
+	
+		return minimax(cell_vals, false).square;
 	}
 
 
