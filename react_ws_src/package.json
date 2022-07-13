@@ -14,7 +14,7 @@
     "lint": "eslint src",
     "test": "jest --coverage",
     "clean": "rimraf dist",
-    "build": "npm run clean && npm run build:webpack",
+    "build": "npm run clean && npm run build:webpack && cp -r ./dist/ ../WS/public",
     "build:webpack": "cross-env NODE_ENV=production webpack --config webpack.config.prod.js",
     "build:webpack_dev": "cross-env NODE_ENV=development webpack --config webpack.config.prod.js",
     "bc": "npm run build && npm run build:copyall_win",
